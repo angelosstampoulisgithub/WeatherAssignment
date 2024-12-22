@@ -13,7 +13,7 @@ class ViewModel:ObservableObject {
     
     func fetchWeather(for city: String) async -> Result<Weather, Error>  {
         do {
-            let response = try await networkService.request(method: .get, url: "http://api.weatherapi.com/v1/current.json?key=1291b1b03e4d41fe81b71316241812&q=\(city)&aqi=no",of: Weather.self)
+            let response = try await networkService.request(method: .get, url: "http://api.weatherapi.com/v1/current.json?key=\(KeyConstants.weatherAPIKey.rawValue)&q=\(city)&aqi=no",of: Weather.self)
             return .success(response)
           } catch {
               return .failure(error)
