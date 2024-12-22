@@ -7,56 +7,17 @@
 
 import Foundation
 import Combine
-
-class ViewModel: ObservableObject {
-    @Published var currentWeather: Weather?
-    @Published var searchQuery: String = ""
-    @Published var isSearching: Bool = false
-
-    @Published var searchResults: [City] = []
-    @Published var searchResultsWeather: [String: Weather] = [:]
-
-
-    let networkService = NetworkService()
+class ViewModel:ObservableObject {
     
-    func fetchWeather(for city: String) async {
-        if let result = try? await networkService.currentWeather(KeyConstants.weatherAPIKey.rawValue, city)
-        {
-            await MainActor.run {
-                
-                if isSearching
-                {
-                    searchResultsWeather[city] = result
-                }
-                else
-                {
-                    currentWeather = result
-                }
-            }
-        }
-    }
+    let networkService = APIClient()
     
-    func fetchCity() async {
-        
-        if let results = try? await networkService.cityAutoComplete(searchQuery) {
-            await MainActor.run {
-                searchResults = results
-            }
-            
-            for city in results {
-                await fetchWeather(for: city.name)
-            }
-        }
+    func fetchWeather(for city: String) async -> Result<Weather, Error>  {
+        do {
+            let response = try await networkService.request(method: .get, url: "http://api.weatherapi.com/v1/current.json?key=1291b1b03e4d41fe81b71316241812&q=\(city)&aqi=no",of: Weather.self)
+            return .success(response)
+          } catch {
+              return .failure(error)
+          }
     }
-    
-    func loadCurrentWeather() async
-    {
-        if let city = CityDefaultsHelper.getCity() {
-            
-            if currentWeather?.location.name != city
-            {
-                await fetchWeather(for: city)
-            }
-        }
-    }
+ 
 }

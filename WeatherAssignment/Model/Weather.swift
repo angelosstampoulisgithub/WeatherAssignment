@@ -7,28 +7,28 @@
 
 import Foundation
 struct Weather: Codable {
-    let location: Location
-    let current: Current
+    var location: Location
+    var current: Current
 }
 
 // MARK: - Current
 struct Current: Codable {
-    let lastUpdatedEpoch: Int
-    let lastUpdated: String
-    let tempC, tempF, isDay: Double
-    let condition: Condition
-    let windMph: Double
-    let windKph, windDegree: Double
-    let windDir: String
-    let pressureMB: Double
-    let pressureIn: Double
-    let precipMm, precipIn, humidity, cloud: Double
-    let feelslikeC, feelslikeF, windchillC, windchillF: Double
-    let heatindexC: Double
-    let heatindexF: Double
-    let dewpointC, dewpointF: Double
-    let visKM, visMiles, uv: Double
-    let gustMph, gustKph: Double
+    var lastUpdatedEpoch: Int
+    var lastUpdated: String
+    var tempC, tempF, isDay: Double
+    var condition: Condition
+    var windMph: Double
+    var windKph, windDegree: Double
+    var windDir: String
+    var pressureMB: Double
+    var pressureIn: Double
+    var precipMm, precipIn, humidity, cloud: Double
+    var feelslikeC, feelslikeF, windchillC, windchillF: Double
+    var heatindexC: Double
+    var heatindexF: Double
+    var dewpointC, dewpointF: Double
+    var visKM, visMiles, uv: Double
+    var gustMph, gustKph: Double
 
     enum CodingKeys: String, CodingKey {
         case lastUpdatedEpoch = "last_updated_epoch"
@@ -64,9 +64,13 @@ struct Current: Codable {
 
 // MARK: - Condition
 struct Condition: Codable {
-    let text, icon: String
-    let code: Int
-    
+    var text, icon: String
+    var code: Int
+    init(text:String,icon:String,code:Int) {
+        self.text = text
+        self.icon = icon
+        self.code = code
+    }
     // Custom initializer to process the icon value
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -79,11 +83,11 @@ struct Condition: Codable {
 
 // MARK: - Location
 struct Location: Codable {
-    let name, region, country: String
-    let lat, lon: Double
-    let tzID: String
-    let localtimeEpoch: Int
-    let localtime: String
+    var name, region, country: String
+    var lat, lon: Double
+    var tzID: String
+    var localtimeEpoch: Int
+    var localtime: String
 
     enum CodingKeys: String, CodingKey {
         case name, region, country, lat, lon
@@ -94,8 +98,8 @@ struct Location: Codable {
 }
 
 struct City: Codable {
-    let id: Int
-    let name, region, country: String
-    let lat, lon: Double
-    let url: String
+    var id: Int
+    var name, region, country: String
+    var lat, lon: Double
+    var url: String
 }
